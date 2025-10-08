@@ -1,0 +1,4 @@
+#ifndef FILEPROCESS_HPP
+#define FILEPROCESS_HPP
+
+#endif //FILEPROCESS_HPP

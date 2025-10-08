@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main_widget</class>
+ <widget class="QWidget" name="main_widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>342</width>
+    <height>258</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>main_widget</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="folderPath"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="readButton">
+         <property name="text">
+          <string>读取</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>写入</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTreeWidget" name="mainTree">
+       <property name="styleSheet">
+        <string notr="true">QHeaderView::section {
+    border-bottom: 1px solid #c0c0c0;
+    background: #f8f8f8;
+    padding: 4px;
+}</string>
+       </property>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
