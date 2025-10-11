@@ -6,7 +6,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.9.1/5.9.1/mingw53_32")
+# set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.9.1/5.9.1/mingw53_32")
+# CMAKE_PREFIX_PATH can be set via command line or environment variable
 
 find_package(Qt5 COMPONENTS
         Core
@@ -14,8 +15,8 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-include_directories(E:/GithubClone/docusaurus-arrange/cmake-build-debug-mingwqt/docusaurus_arrange_autogen/include)
-include_directories(E:/GithubClone/docusaurus-arrange/src)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/docusaurus_arrange_autogen/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 
 add_executable(docusaurus_arrange
