@@ -52,11 +52,6 @@
     padding: 4px;
 }</string>
        </property>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
       </widget>
      </item>
     </layout>

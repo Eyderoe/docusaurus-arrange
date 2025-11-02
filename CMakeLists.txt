@@ -1,38 +1,34 @@
 cmake_minimum_required(VERSION 3.30)
 project(docusaurus_arrange)
 
-set(CMAKE_CXX_STANDARD 14)
-
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH "D:/Qt/Qt5.9.1/5.9.1/mingw53_32")
+set(CMAKE_PREFIX_PATH "D:/Qt/Qt6/6.9.3/mingw_64")
 
-find_package(Qt5 COMPONENTS
+include_directories(${CMAKE_CURRENT_BINARY_DIR}\\docusaurus_arrange_autogen\\include)
+
+find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
         REQUIRED)
 
-include_directories(E:/GithubClone/docusaurus-arrange/cmake-build-debug-mingwqt/docusaurus_arrange_autogen/include)
-include_directories(E:/GithubClone/docusaurus-arrange/src)
-
-add_executable(docusaurus_arrange
+add_executable(docusaurus_arrange app.rc
         src/main.cpp
         src/gui/main_widget.cpp
         src/gui/main_widget.hpp
         src/gui/main_widget.ui
-        src/utils/structMange.cpp
-        src/utils/structMange.hpp
-        app.rc
         src/utils/fileProcess.cpp
-        src/utils/fileProcess.hpp)
-
+        src/utils/fileProcess.hpp
+        src/utils/structManage.cpp
+        src/utils/structManage.hpp)
 target_link_libraries(docusaurus_arrange
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Widgets
+        Qt::Core
+        Qt::Gui
+        Qt::Widgets
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -59,7 +55,7 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     foreach (QT_LIB Core Gui Widgets)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
+                "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
     endforeach (QT_LIB)
 endif ()

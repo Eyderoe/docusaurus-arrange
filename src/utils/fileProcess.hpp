@@ -1,5 +1,5 @@
 /**
- * @file fileProcess.hpp
+* @file fileProcess.hpp
  * @brief 文件处理
  * @details 生成读取修改目录配置文件,生成读取修改文件配置
  */

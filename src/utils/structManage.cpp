@@ -1,4 +1,4 @@
-#include "structMange.hpp"
+#include "structManage.hpp"
 
 
 Node::Node (QString baseDir, QString name, const int sidebarLoc, const bool isFolder):
@@ -97,12 +97,12 @@ void traverse (const QDir &folder, Node *parentNode) {
     }
 }
 
-StructManger::StructManger (const QDir &path): baseDir(path) {}
+StructManager::StructManager (const QDir &path): baseDir(path) {}
 
 /**
  * @brief 创建文件树
  */
-void StructManger::readStruct (QTreeWidget *tree) {
+void StructManager::readStruct (QTreeWidget *tree) {
     traverse(baseDir, tree);
 }
 
@@ -110,6 +110,6 @@ void StructManger::readStruct (QTreeWidget *tree) {
  * @brief 获取文档根目录
  * @return 根目录
  */
-const QDir& StructManger::getPath () const {
+const QDir& StructManager::getPath () const {
     return baseDir;
 }
