@@ -1,3 +1,9 @@
+/**
+ * @file main_widget.hpp
+ * @brief 唯一窗口
+ * @details 所有的窗口行为,控件管理
+ */
+
 #ifndef MAIN_WIDGET_HPP
 #define MAIN_WIDGET_HPP
 

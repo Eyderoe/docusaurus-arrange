@@ -1,6 +1,9 @@
 #include "structMange.hpp"
 
 
+Node::Node (QString baseDir, QString name, const int sidebarLoc, const bool isFolder):
+    baseDir(std::move(baseDir)), name(std::move(name)), sidebarLoc(sidebarLoc), isFolder(isFolder) {}
+
 /**
  * @brief 假如有可能,添加一个文件作为节点
  * @param nodes 临时节点数组
@@ -11,7 +14,7 @@ void addFile (std::vector<Node*> &nodes, const QString &filePath) {
     const QString suffix{QFileInfo(filePath).suffix()};
     if ((suffix != "md") && (suffix != "mdx"))
         return;
-
+    // 处理,有配置读取配置, 没有配置添加配置
 }
 
 /**
@@ -19,8 +22,22 @@ void addFile (std::vector<Node*> &nodes, const QString &filePath) {
  * @param nodes 临时节点数组
  * @param folderPath 目录
  */
-void addFolder (std::vector<Node*> &nodes, QString &folderPath) {
-
+void addFolder (std::vector<Node*> &nodes, const QString &folderPath) {
+    // 有效目录,根下至少有一个md或mdx / 有配置文件
+    QStringList files = QDir(folderPath).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    bool available{false};
+    for (auto &file : files) {
+        if (file.endsWith(".md") || file.endsWith(".mdx") || (file == "_category_.json")) {
+            available = true;
+            break;
+        }
+    }
+    if (!available)
+        return;
+    // 处理,没有文件生成文件
+    const QString configPath{folderPath + QDir::separator() + "_category_.json"};
+    const auto result = readFolderConfig(configPath); // 沟槽的qt5.23
+    nodes.emplace_back(new Node(folderPath, result.first, result.second, true));
 }
 
 /**
@@ -42,13 +59,12 @@ void traverse (const QDir &folder, QTreeWidget *tree) {
     }
     // 排序添加
     std::stable_sort(nodes.begin(), nodes.end(),
-              [](const Node *a, const Node *b) { return (a->loc) < (b->loc); });
+                     [](const Node *a, const Node *b) { return (a->sidebarLoc) < (b->sidebarLoc); });
     for (const auto node : nodes)
         tree->addTopLevelItem(node);
     // 遍历
     for (const auto node : nodes) {
-        QFileInfo info(node->baseDir);
-        if (info.isDir())
+        if (node->isFolder)
             traverse(node->baseDir, node);
     }
 }
@@ -71,17 +87,15 @@ void traverse (const QDir &folder, Node *parentNode) {
     }
     // 排序添加
     std::sort(nodes.begin(), nodes.end(),
-              [](const Node *a, const Node *b) { return (a->loc) < (b->loc); });
+              [](const Node *a, const Node *b) { return (a->sidebarLoc) < (b->sidebarLoc); });
     for (const auto node : nodes)
         parentNode->addChild(node);
     // 遍历
     for (const auto node : nodes) {
-        QFileInfo info(node->baseDir);
-        if (info.isDir())
+        if (node->isFolder)
             traverse(node->baseDir, node);
     }
 }
-
 
 StructManger::StructManger (const QDir &path): baseDir(path) {}
 
@@ -96,6 +110,6 @@ void StructManger::readStruct (QTreeWidget *tree) {
  * @brief 获取文档根目录
  * @return 根目录
  */
-const QDir & StructManger::getPath () const {
+const QDir& StructManger::getPath () const {
     return baseDir;
 }

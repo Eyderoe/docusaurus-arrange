@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.30)
 project(docusaurus_arrange)
 
 set(CMAKE_CXX_STANDARD 14)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -16,7 +17,6 @@ find_package(Qt5 COMPONENTS
 
 include_directories(E:/GithubClone/docusaurus-arrange/cmake-build-debug-mingwqt/docusaurus_arrange_autogen/include)
 include_directories(E:/GithubClone/docusaurus-arrange/src)
-
 
 add_executable(docusaurus_arrange
         src/main.cpp
