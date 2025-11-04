@@ -8,15 +8,14 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH "D:/Qt/Qt6/6.9.3/mingw_64")
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}\\docusaurus_arrange_autogen\\include)
-
 find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
         REQUIRED)
 
-add_executable(docusaurus_arrange app.rc
+add_executable(docusaurus_arrange WIN32
+        app.rc
         src/main.cpp
         src/gui/main_widget.cpp
         src/gui/main_widget.hpp
@@ -24,11 +23,24 @@ add_executable(docusaurus_arrange app.rc
         src/utils/fileProcess.cpp
         src/utils/fileProcess.hpp
         src/utils/structManage.cpp
-        src/utils/structManage.hpp)
+        src/utils/structManage.hpp
+        resources.qrc
+        src/gui/enhancedTree.cpp
+        src/gui/enhancedTree.hpp
+        src/gui/license_dialog.cpp
+        src/gui/license_dialog.hpp
+        src/gui/license_dialog.ui
+)
+
 target_link_libraries(docusaurus_arrange
         Qt::Core
         Qt::Gui
         Qt::Widgets
+)
+target_include_directories(docusaurus_arrange PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/docusaurus_arrange_autogen/include
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)

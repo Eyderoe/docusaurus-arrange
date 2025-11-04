@@ -1,9 +1,6 @@
 #include "structManage.hpp"
 
 
-Node::Node (QString baseDir, QString name, const int sidebarLoc, const bool isFolder):
-    baseDir(std::move(baseDir)), name(std::move(name)), sidebarLoc(sidebarLoc), isFolder(isFolder) {}
-
 /**
  * @brief 假如有可能,添加一个文件作为节点
  * @param nodes 临时节点数组
@@ -15,6 +12,8 @@ void addFile (std::vector<Node*> &nodes, const QString &filePath) {
     if ((suffix != "md") && (suffix != "mdx"))
         return;
     // 处理,有配置读取配置, 没有配置添加配置
+    auto [name,location] = readFileConfig(filePath);
+    nodes.push_back(new Node(filePath, name, location, false));
 }
 
 /**
@@ -35,9 +34,8 @@ void addFolder (std::vector<Node*> &nodes, const QString &folderPath) {
     if (!available)
         return;
     // 处理,没有文件生成文件
-    const QString configPath{folderPath + QDir::separator() + "_category_.json"};
-    const auto result = readFolderConfig(configPath); // 沟槽的qt5.23
-    nodes.emplace_back(new Node(folderPath, result.first, result.second, true));
+    auto [name,location] = readFolderConfig(folderPath);
+    nodes.push_back(new Node(folderPath, name, location, true));
 }
 
 /**
@@ -45,27 +43,25 @@ void addFolder (std::vector<Node*> &nodes, const QString &folderPath) {
  * @param folder 文件夹路径
  * @param tree 根树
  */
-void traverse (const QDir &folder, QTreeWidget *tree) {
+void traverseRead (const QDir &folder, QTreeWidget *tree) {
     // 获取子文件夹/文件
     QStringList files = folder.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     std::vector<Node*> nodes;
     for (auto &fileName : files) {
         QString child{folder.filePath(fileName)};
-        QFileInfo info(child);
-        if (info.isFile())
+        if (QFileInfo info(child); info.isFile())
             addFile(nodes, child);
         else
             addFolder(nodes, child);
     }
     // 排序添加
-    std::stable_sort(nodes.begin(), nodes.end(),
-                     [](const Node *a, const Node *b) { return (a->sidebarLoc) < (b->sidebarLoc); });
+    std::ranges::stable_sort(nodes, std::ranges::less{}, &Node::sidebarLoc);
     for (const auto node : nodes)
         tree->addTopLevelItem(node);
     // 遍历
     for (const auto node : nodes) {
         if (node->isFolder)
-            traverse(node->baseDir, node);
+            traverseRead(node->baseDir, node);
     }
 }
 /**
@@ -73,27 +69,45 @@ void traverse (const QDir &folder, QTreeWidget *tree) {
  * @param folder 文件夹路径
  * @param parentNode 父节点
  */
-void traverse (const QDir &folder, Node *parentNode) {
+void traverseRead (const QDir &folder, Node *parentNode) {
     // 获取子文件夹/文件
     QStringList files = folder.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     std::vector<Node*> nodes;
     for (auto &fileName : files) {
         QString child{folder.filePath(fileName)};
-        QFileInfo info(child);
-        if (info.isFile())
+        if (QFileInfo info(child); info.isFile())
             addFile(nodes, child);
         else
             addFolder(nodes, child);
     }
     // 排序添加
-    std::sort(nodes.begin(), nodes.end(),
-              [](const Node *a, const Node *b) { return (a->sidebarLoc) < (b->sidebarLoc); });
+    std::ranges::stable_sort(nodes, std::ranges::less{}, &Node::sidebarLoc);
     for (const auto node : nodes)
         parentNode->addChild(node);
     // 遍历
     for (const auto node : nodes) {
         if (node->isFolder)
-            traverse(node->baseDir, node);
+            traverseRead(node->baseDir, node);
+    }
+}
+
+/**
+ * @brief 递归更改树节点侧边栏位置
+ * @param parentNode 父节点
+ */
+void traverseWrite (const Node *parentNode) {
+    int loc{};
+    for (int i = 0; i < parentNode->childCount(); ++i) {
+        loc += 10;
+        const Node *child = dynamic_cast<Node*>(parentNode->child(i));
+        if (loc != child->sidebarLoc) {
+            if (child->isFolder)
+                writeFolderConfig(child->baseDir, loc);
+            else
+                writeFileConfig(child->baseDir, loc);
+        }
+        if (child->isFolder)
+            traverseWrite(child);
     }
 }
 
@@ -102,8 +116,8 @@ StructManager::StructManager (const QDir &path): baseDir(path) {}
 /**
  * @brief 创建文件树
  */
-void StructManager::readStruct (QTreeWidget *tree) {
-    traverse(baseDir, tree);
+void StructManager::readStruct (QTreeWidget *tree) const {
+    traverseRead(baseDir, tree);
 }
 
 /**

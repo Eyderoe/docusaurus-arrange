@@ -1,3 +1,5 @@
 /.idea
+/.qtcreator
 /cmake-build-debug-mingwqt6
+/cmake-build-release-mingwqt6
 /doc

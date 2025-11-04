@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>300</height>
+    <width>535</width>
+    <height>386</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -35,22 +35,25 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="writeButton">
          <property name="text">
           <string>写入</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="licenseButton">
+         <property name="text">
+          <string>许可</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="QTreeWidget" name="mainTree">
-       <property name="styleSheet">
-        <string notr="true">QHeaderView::section {
-    border-bottom: 1px solid #c0c0c0;
-    background: #f8f8f8;
-    padding: 4px;
-}</string>
+      <widget class="Tree" name="mainTree">
+       <property name="columnCount">
+        <number>0</number>
        </property>
       </widget>
      </item>
@@ -58,6 +61,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Tree</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">gui/enhancedTree.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

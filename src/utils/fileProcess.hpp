@@ -8,11 +8,21 @@
 #define FILEPROCESS_HPP
 
 
+#include <json.hpp>
 #include <QString>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFileInfo>
+#include <QLine>
+#include <fstream>
+#include <QDir>
 
 
-std::pair<QString,int> readFolderConfig(const QString &configPath);
+std::tuple<QString, int> readFolderConfig (const QString &folderPath);
+std::tuple<QString, int> readFileConfig (const QString &filePath);
+void writeFolderConfig (const QString &folderPath, int sidebarLoc);
+void writeFileConfig (const QString &filePath, int sidebarLoc);
 
 
 #endif //FILEPROCESS_HPP
