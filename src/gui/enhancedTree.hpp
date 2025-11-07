@@ -22,8 +22,8 @@ class Node final : public QTreeWidgetItem {
         Node (QString baseDir, const QString &name, int sidebarLoc, bool isFolder);
 
         QString baseDir; ///< 文件或目录路径
-        int sidebarLoc; ///< 侧边栏位置
-        bool isFolder; ///< 类型(0文件1目录)
+        int sidebarLoc{}; ///< 侧边栏位置
+        bool isFolder{}; ///< 类型(0文件1目录)
 };
 
 class Tree final : public QTreeWidget {

@@ -28,6 +28,7 @@ void main_widget::setupTree () const {
     ui->mainTree->header()->setStyleSheet(
         "QHeaderView::section {border-bottom: 1px solid #c0c0c0;}"
     );
+    ui->mainTree->repaint();
 }
 
 /**
@@ -56,19 +57,7 @@ void main_widget::on_readButton_clicked () {
  * @brief 点击写入按钮，重构树状结构到文件
  */
 void main_widget::on_writeButton_clicked () {
-    int loc{};
-    for (int i = 0; i < ui->mainTree->topLevelItemCount(); ++i) {
-        loc += 10;
-        const Node *child = dynamic_cast<Node*>(ui->mainTree->topLevelItem(i));
-        if (loc != child->sidebarLoc) {
-            if (child->isFolder)
-                writeFolderConfig(child->baseDir, loc);
-            else
-                writeFileConfig(child->baseDir, loc);
-        }
-        if (child->isFolder)
-            traverseWrite(child);
-    }
+    traverseWrite(ui->mainTree);
     on_readButton_clicked();
 }
 

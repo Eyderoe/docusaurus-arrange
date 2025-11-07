@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Node::Node (QString baseDir, const QString &name, const int sidebarLoc, const bool isFolder):
+Node::Node (QString baseDir, const QString &name, const int sidebarLoc, const bool isFolder) :
     baseDir(std::move(baseDir)), sidebarLoc(sidebarLoc), isFolder(isFolder) {
     setText(0, name);
     if (isFolder)

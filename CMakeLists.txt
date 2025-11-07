@@ -40,7 +40,7 @@ target_link_libraries(docusaurus_arrange
 target_include_directories(docusaurus_arrange PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}/docusaurus_arrange_autogen/include
+        ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_autogen/include
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
