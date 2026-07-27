@@ -1,8 +1,7 @@
 #include "main_widget.hpp"
 
 
-main_widget::main_widget (QWidget *parent) :
-    QWidget(parent), ui(new Ui::main_widget) {
+main_widget::main_widget (QWidget *parent) : QWidget(parent), ui(new Ui::main_widget) {
     ui->setupUi(this);
     const QSettings settings;
     ui->folderPath->setText(settings.value("docs_path", "").toString());
@@ -39,10 +38,10 @@ void main_widget::on_readButton_clicked () {
     // 前置处理
     ui->mainTree->clear();
     QString folderText = ui->folderPath->text();
-    if (QDir(folderText).dirName() != "docs")
+    if (QDir(folderText + QDir::separator() + ".docusaurus").exists()) // 假如指向根目录, 尝试更正为 docs
         folderText = folderText + QDir::separator() + "docs";
     const QDir folder(folderText);
-    if (!folder.exists() || (folder.dirName() != "docs")) {
+    if (!folder.exists()) {
         ui->folderPath->setText("路径错误");
         settings.setValue("docs_path", "");
         return;
